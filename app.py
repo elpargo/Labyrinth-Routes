@@ -13,14 +13,18 @@ class App:
 		self.n=n
 		self.background_path ="./Images/background.png"
 		self.block_path="./Images/block.png"
+		self.guia_path="./Images/cuadro-rojo.jpg"
 		self.screen=pygame.display.set_mode( (n*32,n*32),0,32)
 		self.background = self.game.image.load(self.background_path).convert()
 		self.block=self.game.image.load(self.block_path).convert()
+		self.guia=self.game.image.load(self.guia_path).convert()
 		self.lab=lab
 		self.inicio=inicio
 		self.final=final
 		self.setPlayer_img()
 		self.PlayerList=[]
+		self.AllRoutes=[]
+		self.algo=False
 
 	def draw(self):
 		j=0
@@ -42,9 +46,20 @@ class App:
 			# print PlayerList[i].Y
 			#print player
 			self.screen.blit( player.get_curr_img() ,(player.X, player.Y ))
-		 
+
+		if self.algo==True:
+			for rutas in self.AllRoutes:
+				for ruta in rutas:
+					self.screen.blit( self.guia ,ruta)
+					
+			#pygame.draw.lines(self.screen, (255,0,0), False, self.AllRoutes[0], 1)
 		#self.screen.blit( self.background, (0,0) )
 		#self.screen.blit( self.background, (96,0) )
+
+	def drawRoutes(self):
+		print self.AllRoutes
+		self.algo=True
+		
 
 
 	def setPlayer_img(self):
@@ -95,16 +110,16 @@ def main():
 	lab=[[1,0,1,1,1,1,1,1,1,1],
 		[1,0,0,0,0,0,0,0,0,1],
 		[1,0,1,1,1,1,1,1,0,1],
-		[1,0,1,1,1,1,0,0,0,1],
 		[1,0,1,1,1,1,0,1,0,1],
 		[1,0,1,1,1,1,0,1,0,1],
-		[1,0,1,0,0,1,0,1,0,1],
+		[1,0,1,1,1,1,0,1,0,1],
+		[1,0,0,0,0,1,0,1,0,1],
 		[1,0,1,1,1,1,0,1,0,1],
 		[1,0,0,0,0,0,0,1,0,1],
 		[1,1,1,1,1,1,1,1,0,1]]
 
 	inicio=[0,1]
-	final=[9.8]
+	final=[9,8]
 	juego = App(10,lab,inicio,final)
 	recorrido=[]
 	player=Player.Player(juego,lab,2,inicio,final,recorrido,juego.Player_img)

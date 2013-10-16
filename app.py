@@ -3,6 +3,7 @@ import thread
 import time
 from random import randrange
 import Player
+import Leer
 
 
 
@@ -107,22 +108,32 @@ class App:
 	# 	PlayerList[-1].start()	
 
 def main():
-	lab=[[1,0,1,1,1,1,1,1,1,1],
-		[1,0,0,0,0,0,0,0,0,1],
-		[1,0,1,1,1,1,1,1,0,1],
-		[1,0,1,1,1,1,0,1,0,1],
-		[1,0,1,1,1,1,0,1,0,1],
-		[1,0,1,1,1,1,0,1,0,1],
-		[1,0,0,0,0,1,0,1,0,1],
-		[1,0,1,1,1,1,0,1,0,1],
-		[1,0,0,0,0,0,0,1,0,1],
-		[1,1,1,1,1,1,1,1,0,1]]
 
-	inicio=[0,1]
-	final=[9,8]
-	juego = App(10,lab,inicio,final)
+	archivo =Leer.leerArchivo("Test2.txt")
+
+	maze=archivo[2]
+
+	inicio=archivo[0]
+	final=archivo[1]
+
+	n=len(maze)
+	print n
+	juego = App(n,maze,inicio,final)
 	recorrido=[]
-	player=Player.Player(juego,lab,2,inicio,final,recorrido,juego.Player_img)
+	# if inicio[1]<n:
+	# 	if maze[inicio[0]][inicio[1]+1]==0:
+	# 		Or=1
+	# elif inicio[1]>0:
+	# 	if maze[inicio[0]][inicio[1]-1]==0:
+	# 		Or=3
+	# elif maze[inicio[0]+1][inicio[1]]==0:
+	# 	Or=2
+	# elif maze[inicio[0]-1][inicio[1]]==0:
+	# 	Or=0
+
+
+
+	player=Player.Player(juego,archivo[2],1,inicio,final,recorrido,juego.Player_img,n)
 	juego.PlayerList.append(player)
 	juego.PlayerList[0].start()
 	while True:

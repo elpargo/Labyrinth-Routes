@@ -21,14 +21,14 @@ class Player(threading.Thread):
 		self.Y=self.inicio[0]*32
 		self.X=self.inicio[1]*32
 		self.alive=True
-		self.move_pos=0
-		self.move_pos_n=0
+		self.move_pos=00
 		self.posX=inicio[1]
 		self.posY=inicio[0]
-		self.finalizo=False
-		#self.positioni_e=self.position
 		self.app=app
 		self.n=n
+		self.lapida_path="./Images/lapida.png"
+		self.lapida=pygame.image.load(self.lapida_path).convert_alpha(self.app.background)
+		print self.name
 
 	def move(self):
 
@@ -43,19 +43,22 @@ class Player(threading.Thread):
 				self.img_current=self.img_list[self.Or][0]
 				self.chg=0
 			if self.move_pos==-32:
-				#print "llegue 0"
+				if self.name=="Thread-1":
+					self.maze[self.inicio[0]][self.inicio[1]]=1
 				self.posY-=1
 				self.move_pos=0
 				self.recorrido.append((self.posX*32,self.posY*32))
-				#self.maze[self.posY][self.posX]=2
 				if(self.posX==self.fin[1] and self.posY==self.fin[0]):
 					self.MazeOut()
-				if self.maze[self.posY][self.posX+1]==0:
-					self.llamarHijo(1,((self.posX+1)*32,self.posY*32))
-				if self.maze[self.posY][self.posX-1]==0:
-					self.llamarHijo(3,((self.posX-1)*32,self.posY*32))	
-				if self.maze[self.posY-1][self.posX]==1:
-					self.Die()
+				if 	self.posX<self.n-1 and self.posX>=0:
+					if self.maze[self.posY][self.posX+1]==0:
+						self.llamarHijo(1,((self.posX+1)*32,self.posY*32))
+				if 	self.posX>0:
+					if self.maze[self.posY][self.posX-1]==0:
+						self.llamarHijo(3,((self.posX-1)*32,self.posY*32))	
+				if 	self.posY>0:
+					if self.maze[self.posY-1][self.posX]==1:
+						self.Die()
 				
 				
 
@@ -70,19 +73,21 @@ class Player(threading.Thread):
 				self.img_current=self.img_list[self.Or][0]
 				self.chg=0
 			if self.move_pos==32:
-				#print "llegue 2"
+				if self.name=="Thread-1":
+					self.maze[self.inicio[0]][self.inicio[1]]=1
 				self.posY+=1
 				self.move_pos=0
 				self.recorrido.append((self.posX*32,self.posY*32))
-				#self.maze[self.posY][self.posX]=2
 				if(self.posX==self.fin[1] and self.posY==self.fin[0]):
+					
 					self.MazeOut()
-				if self.maze[self.posY][self.posX+1]==0:
-					self.llamarHijo(1,((self.posX+1)*32,self.posY*32))
-				if self.maze[self.posY][self.posX-1]==0:
-
-					self.llamarHijo(3,((self.posX-1)*32,self.posY*32))
-				if 	self.posY<self.n:
+				if 	self.posX<self.n-1 and self.posX>=0:
+					if self.maze[self.posY][self.posX+1]==0:
+						self.llamarHijo(1,((self.posX+1)*32,self.posY*32))
+				if 	self.posX>0:
+					if self.maze[self.posY][self.posX-1]==0:
+						self.llamarHijo(3,((self.posX-1)*32,self.posY*32))
+				if 	self.posY<self.n and self.posY>=0:
 					if self.maze[self.posY+1][self.posX]==1:
 						self.Die()
 					
@@ -91,7 +96,6 @@ class Player(threading.Thread):
 				
 				
 		elif self.Or==1:
-			#self.move_pos_n=0
 			self.move_pos+=8
 			self.X+=8
 			if self.chg==0:
@@ -101,24 +105,27 @@ class Player(threading.Thread):
 				self.img_current=self.img_list[self.Or][0]
 				self.chg=0
 			if self.move_pos==32:
-				#print "llegue 1"
+				if self.name=="Thread-1":
+					self.maze[self.inicio[0]][self.inicio[1]]=1
 				self.posX+=1
 				self.move_pos=0
 
-				#self.maze[self.posY][self.posX]=2
 				self.recorrido.append((self.posX*32,self.posY*32))
-
-				if self.maze[self.posY+1][self.posX]==0:
-				 	self.llamarHijo(2,(self.posX*32,(self.posY+1)*32))
-				if self.maze[self.posY-1][self.posX]==0:
-				 	self.llamarHijo(0,(self.posX*32,(self.posY-1)*32))
-				if self.maze[self.posY][self.posX+1]==1:
-					self.Die()
+				if(self.posX==self.fin[1] and self.posY==self.fin[0]):
+					self.MazeOut()
+				if 	self.posY<self.n and self.posY>=0:
+					if self.maze[self.posY+1][self.posX]==0:
+					 	self.llamarHijo(2,(self.posX*32,(self.posY+1)*32))
+				if 	self.posY>0:
+					if self.maze[self.posY-1][self.posX]==0:
+					 	self.llamarHijo(0,(self.posX*32,(self.posY-1)*32))
+				if 	self.posX<self.n and self.posX>=0:
+					if self.maze[self.posY][self.posX+1]==1:
+						self.Die()
 				
 				
 
 		elif self.Or==3:
-			#self.move_pos_n=0
 			self.move_pos-=8
 			self.X-=8
 			if self.chg==0:
@@ -128,27 +135,26 @@ class Player(threading.Thread):
 				self.img_current=self.img_list[self.Or][0]
 				self.chg=0
 			if self.move_pos==-32:
-				#print "llegue 3"
+				if self.name=="Thread-1":
+					self.maze[self.inicio[0]][self.inicio[1]]=1
 				self.posX-=1
 				self.move_pos=0
-				#self.maze[self.posY][self.posX]=2
 				self.recorrido.append((self.posX*32,self.posY*32))
-
-				if self.maze[self.posY+1][self.posX]==0:
-				 	self.llamarHijo(2,(self.posX*32,(self.posY+1)*32))
-				if self.maze[self.posY-1][self.posX]==0:
-				 	self.llamarHijo(0,(self.posX*32,(self.posY-1)*32))
-				if self.maze[self.posY][self.posX-1]==1:
-					self.Die()
+				if(self.posX==self.fin[1] and self.posY==self.fin[0]):
+					self.MazeOut()
+				if 	self.posY<self.n and self.posY>=0:
+					if self.maze[self.posY+1][self.posX]==0:
+					 	self.llamarHijo(2,(self.posX*32,(self.posY+1)*32))
+				if 	self.posY>0:
+					if self.maze[self.posY-1][self.posX]==0:
+					 	self.llamarHijo(0,(self.posX*32,(self.posY-1)*32))
+				if 	self.posX>0:
+					if self.maze[self.posY][self.posX-1]==1:
+						self.Die()
 				
-				
-
-
-		
-
-
 	def Die(self):
 		print "mori"
+		self.img_current=self.lapida
 		self.alive=False
 
 	def get_curr_img(self):
@@ -158,7 +164,6 @@ class Player(threading.Thread):
 		print "nacio mi hijo"
 		cantMove=True
 		for i in range(len(self.recorrido)):
-			print `self.recorrido[i]` +" = " +`dupla`
 			if dupla==self.recorrido[i]:
 				print "no puede"
 				cantMove=False
@@ -170,10 +175,10 @@ class Player(threading.Thread):
 		#player.start()
 
 	def MazeOut(self):
+		color=(randrange(256),randrange(256),randrange(256))
 		print "estoy en la meta"
 		self.app.AllRoutes.append(self.recorrido)
-		self.app.drawRoutes()
-		self.finalizo=True
+		self.app.drawRoutes(color)
 		self.alive=False
 
 

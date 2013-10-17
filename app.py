@@ -8,31 +8,31 @@ import Leer
 
 
 class App:
-	def __init__(self,n,lab,inicio,final):
+	def __init__(self,n,maze,inicio,final):
 		self.game=pygame
 		self.game.init()
 		self.n=n
 		self.background_path ="./Images/background.png"
 		self.block_path="./Images/block.png"
-		self.guia_path="./Images/cuadro-rojo.jpg"
 		self.screen=pygame.display.set_mode( (n*32,n*32),0,32)
 		self.background = self.game.image.load(self.background_path).convert()
 		self.block=self.game.image.load(self.block_path).convert()
-		self.guia=self.game.image.load(self.guia_path).convert()
-		self.lab=lab
+		self.maze=maze
 		self.inicio=inicio
 		self.final=final
 		self.setPlayer_img()
 		self.PlayerList=[]
 		self.AllRoutes=[]
-		self.algo=False
+		self.canDrawRoutes=False
+		self.colorList=[]
+
 
 	def draw(self):
 		j=0
 		m=0
 		for y in range(0,self.n*32,32):
 		 	for x in range(0,self.n*32,32):
-		 		if self.lab[j][m]==0:
+		 		if self.maze[j][m]==0:
 		 			self.screen.blit( self.background,(x,y))
 		 		else:
 		 			self.screen.blit( self.block,(x,y))
@@ -40,26 +40,23 @@ class App:
 		 	j+=1
 		 	m=0
 		
-		#print len(PlayerList)
-		#print len(PlayerList)
+		
 		for player in self.PlayerList:
-			# print PlayerList[i].X
-			# print PlayerList[i].Y
-			#print player
+
 			self.screen.blit( player.get_curr_img() ,(player.X, player.Y ))
 
-		if self.algo==True:
+		if self.canDrawRoutes==True:
+			cont=0
 			for rutas in self.AllRoutes:
-				for ruta in rutas:
-					self.screen.blit( self.guia ,ruta)
-					
-			#pygame.draw.lines(self.screen, (255,0,0), False, self.AllRoutes[0], 1)
-		#self.screen.blit( self.background, (0,0) )
-		#self.screen.blit( self.background, (96,0) )
+				pygame.draw.lines(self.screen, self.colorList[cont], False, rutas, 5)
+				cont+=1
+	
 
-	def drawRoutes(self):
-		print self.AllRoutes
-		self.algo=True
+	def drawRoutes(self,color):
+
+		
+		self.colorList.append(color)
+		self.canDrawRoutes=True
 		
 
 
@@ -98,18 +95,11 @@ class App:
 
 		
 		self.Player_img = [ list(self.Player_img_n), list(self.Player_img_e),list(self.Player_img_s), list(self.Player_img_w)]
-	# @staticmethod	
-	# def llamarHijo(Or,inicio,maze,fin,recorrido,img_list):
-	# 	print "nacio mi hijo"
-	# 	player=Player.Player(maze,Or,inicio,fin,recorrido,img_list)
-	# 	print len(PlayerList)
-	# 	PlayerList.append(player)
-	# 	print len(PlayerList)
-	# 	PlayerList[-1].start()	
+	
 
 def main():
 
-	archivo =Leer.leerArchivo("Test2.txt")
+	archivo =Leer.leerArchivo("Maze.txt")
 
 	maze=archivo[2]
 
@@ -120,20 +110,23 @@ def main():
 	print n
 	juego = App(n,maze,inicio,final)
 	recorrido=[]
-	# if inicio[1]<n:
-	# 	if maze[inicio[0]][inicio[1]+1]==0:
-	# 		Or=1
-	# elif inicio[1]>0:
-	# 	if maze[inicio[0]][inicio[1]-1]==0:
-	# 		Or=3
-	# elif maze[inicio[0]+1][inicio[1]]==0:
-	# 	Or=2
-	# elif maze[inicio[0]-1][inicio[1]]==0:
-	# 	Or=0
+	if inicio[1]<n:
+		if maze[inicio[0]][inicio[1]+1]==0:
+			Or=1
+
+	if inicio[1]>0:
+		if maze[inicio[0]][inicio[1]-1]==0:
+			Or=3
+	if inicio[0]<n:
+		if maze[inicio[0]+1][inicio[1]]==0:
+			Or=2
+	if inicio[0]>0:
+		if maze[inicio[0]-1][inicio[1]]==0:
+			Or=0
 
 
 
-	player=Player.Player(juego,archivo[2],1,inicio,final,recorrido,juego.Player_img,n)
+	player=Player.Player(juego,archivo[2],Or,inicio,final,recorrido,juego.Player_img,n)
 	juego.PlayerList.append(player)
 	juego.PlayerList[0].start()
 	while True:

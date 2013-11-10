@@ -1,49 +1,36 @@
-def leerArchivo(archivo_path):
+def str_to_list(string):
+    return [int(i) for i in string.split()]
 
+def leerArchivo(archivo_path):
 	config_file = open(archivo_path,'r')
 
 	result = config_file.readlines()
 
-	result = [ i.replace('\n','') for i in result]
-	lis=[]
-	maze=[]
-	cont=0
-	inicio=[]
-	final=[]
-	tmp=''
-	for i in result:
-		if cont == 0:
-			tmp=''
-			for char in i:
-				if char==" ":
-					print tmp
-					tmp=int(tmp)
-					inicio.append(tmp)
-					tmp=''
-				else:	
-					tmp+=char
-			inicio.append(int(tmp))
+        inicio = str_to_list(result.pop(0))
+        final = str_to_list(result.pop(0))
+        
+        maze = []
+        for line in result:
+            maze.append([int(i) for i in list(line.strip())])
 
-		if cont == 1:
-			tmp=''
-			for char in i:
-				if char==" ":
-					final.append(int(tmp))
-					tmp=''
-				else:	
-					tmp+=char
-			final.append(int(tmp))
-
-		if cont>=2:
-			for char in i:
-				if char=="1":
-					lis.append(1)
-				elif char=="0":
-					lis.append(0)
-			maze.append(lis)
-			lis=[]
-		cont+=1
-	#aze = [ [1 if space  == "1" else 0 for space in i] for i in result ]
-	
 	return inicio,final,maze
 
+def main():
+    test_maze1()
+    test_maze2()
+
+def test_maze1():
+    ini,final,maze = leerArchivo("Maze.txt")
+    assert [0,1] == ini
+    assert [9,8] == final
+    assert [[1, 0, 1, 1, 1, 1, 1, 1, 1, 1], [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], [1, 0, 1, 1, 1, 1, 1, 1, 0, 1], [1, 0, 1, 1, 1, 1, 0, 0, 0, 1], [1, 0, 1, 1, 1, 1, 0, 1, 0, 1], [1, 0, 1, 1, 1, 1, 0, 1, 0, 1], [1, 0, 0, 0, 0, 1, 0, 1, 0, 1], [1, 0, 1, 1, 1, 1, 0, 1, 0, 1], [1, 0, 0, 0, 0, 0, 0, 1, 0, 1], [1, 1, 1, 1, 1, 1, 1, 1, 0, 1]] == maze
+
+def test_maze2():
+    ini,final,maze = leerArchivo("Maze2.txt")
+    assert [19,0] == ini
+    assert [1,0] == final
+    assert [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], [0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1], [1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1], [1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1], [1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 0, 1], [1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1], [1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1], [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1], [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1], [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1], [1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1], [1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1], [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1], [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1], [1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1], [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1], [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]] == maze
+    
+    
+if __name__ == "__main__":
+    main()
